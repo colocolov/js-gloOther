@@ -5,22 +5,8 @@ const headerInput = document.querySelector(".header-input");
 const todoList = document.querySelector(".todo-list");
 const todoCompleted = document.querySelector(".todo-completed");
 
-console.log(todoControl);
-console.log(headerInput);
-console.log(todoList);
-console.log(todoCompleted);
-
 // массив задач
-const toDoData = [
-  // {
-  //   text: "Сварить кофе",
-  //   completed: false,
-  // },
-  // {
-  //   text: "Помыть посуду",
-  //   completed: true,
-  // },
-];
+const toDoData = [];
 
 // отрисовывает все задачи
 const render = function () {
@@ -48,10 +34,19 @@ const render = function () {
     }
 
     // перемещение задачи при ее выполнении
-    li.querySelector(".todo-comlete").addEventListener("click", function () {
+    li.querySelector(".todo-complete").addEventListener("click", function () {
       item.completed = !item.completed;
       render();
     });
+
+    // удаление задачи
+    li.querySelector(".todo-remove").addEventListener("click", function () {
+      li.remove();
+      localStorage.removeItem();
+    });
+
+    //добавлние и localStorage
+    localStorage.setItem("toDo", JSON.stringify(toDoData));
   });
 };
 
@@ -59,15 +54,33 @@ todoControl.addEventListener("submit", function (event) {
   // отмена стандартной функции перезагрузки страницы по клику на +
   event.preventDefault();
 
-  // новая задача
-  const newTodDo = {
-    text: headerInput.value,
-    completed: false,
-  };
+  // проверка на заполненность поля ввода
+  if (headerInput.value != "") {
+    // новая задача
+    const newTodDo = {
+      text: headerInput.value,
+      completed: false,
+    };
 
-  // добавление в массив новой задачи
-  toDoData.push(newTodDo);
-  headerInput.value = "";
+    // добавление в массив новой задачи
+    toDoData.push(newTodDo);
+    headerInput.value = "";
 
-  render();
+    render();
+  } else {
+    alert("Введите задачу!");
+  }
 });
+
+// получение данных из localStorage
+const returnToDo = function () {
+  const backToDo = JSON.parse(localStorage.getItem("toDo"));
+
+  if (localStorage.getItem("toDo") !== null) {
+    backToDo.forEach(function (item) {
+      toDoData.push(item);
+      render();
+    });
+  }
+};
+returnToDo();
