@@ -42,11 +42,10 @@ const render = function () {
     // удаление задачи
     li.querySelector(".todo-remove").addEventListener("click", function () {
       li.remove();
-      localStorage.removeItem();
     });
 
     //добавлние и localStorage
-    localStorage.setItem("toDo", JSON.stringify(toDoData));
+    localStorage.setItem("toDoList", JSON.stringify(toDoData));
   });
 };
 
@@ -62,6 +61,8 @@ todoControl.addEventListener("submit", function (event) {
       completed: false,
     };
 
+    console.log(newTodDo);
+
     // добавление в массив новой задачи
     toDoData.push(newTodDo);
     headerInput.value = "";
@@ -73,14 +74,14 @@ todoControl.addEventListener("submit", function (event) {
 });
 
 // получение данных из localStorage
-const returnToDo = function () {
-  const backToDo = JSON.parse(localStorage.getItem("toDo"));
+const loadToDo = function () {
+  const toDoList = JSON.parse(localStorage.getItem("toDoList"));
 
-  if (localStorage.getItem("toDo") !== null) {
-    backToDo.forEach(function (item) {
+  if (localStorage.getItem("toDoList") !== null) {
+    toDoList.forEach(function (item) {
       toDoData.push(item);
       render();
     });
   }
 };
-returnToDo();
+loadToDo();
